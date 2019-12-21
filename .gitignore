@@ -33,3 +33,4 @@
 *.su
 my-LED-task.code-workspace
 .gitignore
+.vscode/c_cpp_properties.json
