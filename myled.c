@@ -110,8 +110,9 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 		printk(KERN_INFO "%c:%d",c,i);
 	}
 	return 1;
-}
 */
+}//end of led_write
+
 static struct file_operations led_fops = {
 	.owner = THIS_MODULE,
 	.write = led_write
