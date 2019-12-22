@@ -80,7 +80,7 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 		{'@' , 20, {1,0,1,1,1,0,1,1,1,0,1,0,1,1,1,0,1,0,0     } },//42
 		{'(' , 18, {1,1,1,0,1,0,1,1,1,0,1,1,1,0,1,0,0         } },//43
 		{')' , 22, {1,1,1,0,1,0,1,1,1,0,1,1,1,0,1,0,1,1,1,0,0 } },//44
-		{'"' , 18, {1,0,1,1,1,0,1,0,1,0,1,1,1,0,1,0,0         } },//45
+		{'\"', 18, {1,0,1,1,1,0,1,0,1,0,1,1,1,0,1,0,0         } },//45
 		{'#' ,  1, {0                                         } } //46
 	};
 
@@ -99,34 +99,34 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 	}
 	else{
 		switch (c){
-			case '.':
+			case '.' :
 				result_num = 36;
 				break;
-			case ',':
+			case ',' :
 				result_num = 37;
 				break;
-			case '?':
+			case '?' :
 				result_num = 38;
 				break;
-			case '!':
+			case '!' :
 				result_num = 39;
 				break;
-			case '-':
+			case '-' :
 				result_num = 40;
 				break;
-			case '/':
+			case '/' :
 				result_num = 41;
 				break;
-			case '@':
+			case '@' :
 				result_num = 42;
 				break;
-			case '()':
+			case '()' :
 				result_num = 43;
 				break;
-			case ')':
+			case ')' :
 				result_num = 44;
 				break;
-			case '"':
+			case '\"':
 				result_num = 45;
 				break;
 			default:
