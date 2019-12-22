@@ -752,6 +752,7 @@ deps_/home/ubuntu/my-LED-task/myled.o := \
     $(wildcard include/config/indirect/pio.h) \
   include/linux/fwnode.h \
   include/linux/vmalloc.h \
+  include/linux/ctype.h \
 
 /home/ubuntu/my-LED-task/myled.o: $(deps_/home/ubuntu/my-LED-task/myled.o)
 

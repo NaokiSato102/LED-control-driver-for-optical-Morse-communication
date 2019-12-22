@@ -13,6 +13,8 @@
 
 #define LENGTH 32
 
+#include <linux/ctype.h>
+
 MODULE_AUTHOR("Naoki Sato");
 MODULE_DESCRIPTION("driver for LED control");
 MODULE_LICENSE("GPL");
@@ -77,6 +79,7 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 	if(copy_from_user(&c,buf,sizeof(char)))
 		return -EFAULT;
 
+	
 /*
 
 	if(c == '0')
