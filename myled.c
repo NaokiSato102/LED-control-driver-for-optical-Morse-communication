@@ -90,23 +90,28 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 	printk(KERN_INFO "receive \"%c\"\n",c);
 
 	if     ( isalpha((unsigned char)c) ) {
-		result_num = toupper((unsigned char)c)-'A'-'0'+'9';
+		result_num = toupper((unsigned char)c) -'A' +1 -'0' +'9';
 	}
 	else if( isdigit((unsigned char)c) ) {
 		result_num = c -'0';
 	}
+	else{
+		result_num = 36;
+	}
 	printk(KERN_INFO "result_num = \"%d\"\n",result_num);
 
-	
+	for(1=0;i<mo[result_num].size;i++){
+		printk(KERN_INFO "char%c:no%d:send %d",mo[i].str_type,i,mo[i].code[i])
+	}
 
 
-
+/*
 	for(i=0;i<(c-'0');i++ ){
 		printk(KERN_INFO "%c:%d",c,i);
 	}
 	return 1;
 }
-
+*/
 static struct file_operations led_fops = {
 	.owner = THIS_MODULE,
 	.write = led_write
