@@ -110,8 +110,9 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 	for(i=0;i<(c-'0');i++ ){
 		printk(KERN_INFO "%c:%d",c,i);
 	}
-	return 1;
 */
+	return 1;
+
 }//end of led_write
 
 static struct file_operations led_fops = {
