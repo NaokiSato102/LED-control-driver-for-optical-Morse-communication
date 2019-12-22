@@ -27,7 +27,7 @@ static volatile u32 *gpio_base = NULL;
 
 static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_t* pos){
 	char c;
-	int i,result_num;
+	int i, j, result_num;
 	typedef struct s_morse {
 		char str_type;
 		int size;
@@ -100,7 +100,9 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 		else{
 			gpio_base[10] = 1 << 25;//off
 		}
-		udelay(10000);
+		for(j=0;j<10;j++){
+			udelay(10000);
+		}
 	}
 
 
