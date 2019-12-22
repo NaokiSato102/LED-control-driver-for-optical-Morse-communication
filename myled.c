@@ -91,6 +91,7 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 
 	if     ( isalpha((unsigned char)c) ) {
 		result_num = toupper((unsigned char)c)-'A'-'0'+'9';
+	}
 	else if( isdigit((unsigned char)c) ) {
 		result_num = c -'0';
 	}
