@@ -6,17 +6,12 @@
 #include <linux/io.h>
 
 
-#define MODULE
-#define __KERNEL__
-#include <linux/kernel.h>
-#include <linux/sched.h>
-#if LINUX_VERSION_CODE < 0x020100
-#define schedule_timeout(a){current->timeout = jiffies + (a); schedule();}
-#endif
+
 
 #define LENGTH 32
 
 #include <linux/ctype.h>
+#include <linux/delay.h>
 
 MODULE_AUTHOR("Naoki Sato");
 MODULE_DESCRIPTION("driver for LED control");
@@ -105,9 +100,7 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 		else{
 			gpio_base[10] = 1 << 25;//off
 		}
-
-		current->state = TASK_INTERRUPTIBLE;  // 寝た状態
-		schedule_timeout(HZ);                 // HZ をいれれば1秒のはず
+		udelay(10000);
 	}
 
 
