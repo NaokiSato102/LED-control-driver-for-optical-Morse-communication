@@ -86,7 +86,7 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 	else if(c == '1')
 		gpio_base[7] = 1 << 25;
 */
-	printk(KERN_INFO "receive %c\n",c);
+	printk(KERN_INFO "receive \"%c\"\n",c);
 
 
 
