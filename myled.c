@@ -3,7 +3,15 @@
 #include <linux/cdev.h>
 #include <linux/device.h>
 #include <linux/uaccess.h>
-#include <linux/io.h>   
+#include <linux/io.h>
+
+#include <linux/kernel.h>
+#include <linux/sched.h>
+#if LINUX_VERSION_CODE < 0x020100
+#define schedule_timeout(a){current->timeout = jiffies + (a); schedule();}
+#endif
+
+#define LENGTH 32
 
 MODULE_AUTHOR("Naoki Sato");
 MODULE_DESCRIPTION("driver for LED control");
@@ -18,14 +26,69 @@ static volatile u32 *gpio_base = NULL;
 static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_t* pos)
 {
 	char c;
+	int i;
+	typedef struct s_morse {
+		char str_type;
+		int size;
+		int code[LENGTH]
+	} MORSE;
+
+	MORSE mo[]={
+		{"A", 8,	10111000          },
+		{"B", 12,	111010101000      },
+		{"C", 13,	1110111101000     },
+		{"D", 10,	1110101000        },
+		{"E", 5,	10000             },
+		{"F", 12,	101011110000      },
+		{"G", 11,	11111110000       },
+		{"H", 11,	10101010000       },
+		{"I", 7,	1010000           },
+		{"J", 14,	10111111111000    },
+		{"K", 11,	11110111000       },
+		{"L", 12,	101111010000      },
+		{"M", 9,	111111000         },
+		{"N", 8,	11110000          },
+		{"O", 12,	111111111000      },
+		{"P", 12,	1011111110000     },
+		{"Q", 14,	11111110111000    },
+		{"R", 10,	1011110000        },
+		{"S", 9,	101010000         },
+		{"T", 6,	111000            },
+		{"U", 10,	1010111000        },
+		{"V", 12,	101010111000      },
+		{"W", 11,	10111111000       },
+		{"X", 13,	1111010111000     },
+		{"Y", 14,	11110111111000    },
+		{"Z", 13,	1111111010000     },
+		{"1", 17,	10111111111111000 },
+		{"2", 16,	1010111111111000  },
+		{"3", 15,	101010111111000   },
+		{"4", 14,	10101010111000    },
+		{"5", 13,	1010101010000     },
+		{"6", 14,	11110101010000    },
+		{"7", 15,	111111101010000   },
+		{"8", 16,	1111111111010000  },
+		{"9", 17,	11111111111110000 },
+		{"0", 18,	111111111111111000}
+	};
+
 	if(copy_from_user(&c,buf,sizeof(char)))
 		return -EFAULT;
+
+/*
 
 	if(c == '0')
 		gpio_base[10] = 1 << 25;
 	else if(c == '1')
 		gpio_base[7] = 1 << 25;
+*/
+	printk(KERN_INFO "receive %c\n",c);
 
+
+
+	for(i=0;i<(c-'0');i++ ){
+		printk(KERN_INFO "%c:%d",c,i);
+	}
 	return 1;
 }
 
