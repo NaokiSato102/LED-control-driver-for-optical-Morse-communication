@@ -101,7 +101,7 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 	printk(KERN_INFO "result_num = \"%d\"\n",result_num);
 
 	for(i=0;i<mo[result_num].size;i++){
-		printk(KERN_INFO "char%c:no%d:send %d",mo[i].str_type,i,mo[i].code[i]);
+		printk(KERN_INFO "char%c:no%2d:send %d",mo[result_num].str_type,i,mo[i].code[i]);
 	}
 
 
