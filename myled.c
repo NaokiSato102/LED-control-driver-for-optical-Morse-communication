@@ -4,21 +4,15 @@
 #include <linux/device.h>
 #include <linux/uaccess.h>
 #include <linux/io.h>
-
-
-
-
-#define LENGTH 32
-
 #include <linux/ctype.h>
 #include <linux/delay.h>
 
+#define LENGTH 32
+
 MODULE_AUTHOR("Naoki Sato");
-MODULE_DESCRIPTION("driver for LED control");
+MODULE_DESCRIPTION("LED control driver for optical Morse communication");
 MODULE_LICENSE("GPL");
-MODULE_VERSION("0.1");
-
-
+MODULE_VERSION("1.0");
 
 static dev_t dev;
 static struct cdev cdv;
@@ -34,7 +28,7 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 		int code[LENGTH]
 	} MORSE;
 
-	MORSE mo[]={
+	MORSE mo[]={//モールス符号リスト。和文モールスや送信開始等々の略符号には非対応。
 		{'0' , 22, {1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,0 } },// 0
 		{'1' , 18, {1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,0         } },// 1
 		{'2' , 18, {1,0,1,0,1,1,1,0,1,1,1,0,1,1,1,0,0         } },// 2
@@ -84,20 +78,18 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 		{'#' ,  1, {0                                         } } //46
 	};
 
-	if(copy_from_user(&c,buf,sizeof(char)))
+	if(copy_from_user(&c,buf,sizeof(char) ) ){
 		return -EFAULT;
-
-
-
-	printk(KERN_INFO "receive \"%c\"\n",c);
-
-	if     ( isalpha((unsigned char)c) ) {
-		result_num = toupper((unsigned char)c) -'A' +1 -'0' +'9';
 	}
-	else if( isdigit((unsigned char)c) ) {
-		result_num = c -'0';
+	printk(KERN_INFO "receive \"%c\"\n",c);//受信記号表示
+
+	if     ( isalpha((unsigned char)c) ) {//アルファベットを受信した場合
+		result_num = toupper((unsigned char)c) -'A' +1 -'0' +'9';//符号リストのアルファベット項を出力。なお、マジックナンバーはリストへのオフセット
 	}
-	else{
+	else if( isdigit((unsigned char)c) ) {//10進数の数字を受信した場合
+		result_num = c -'0';//符号リストの10進数の数字項を出力。なお、マジックナンバーはリストへのオフセット
+	}
+	else{//それ以外を受信した場合。ctypeを活用しようにもモールス信号として出力可能な記号とASCIIコードとの相性がすこぶる悪かった。
 		switch (c){
 			case '.' :
 				result_num = 36;
@@ -129,33 +121,27 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 			case '\"':
 				result_num = 45;
 				break;
-			default:
+			default://対象外コードは1休符として解釈することとした。
 				result_num = 46;
 				break;
 		}
-	}
-	printk(KERN_INFO "result_num = \"%d\"\n",result_num);
+	}//elseの括弧閉じ
+
+	printk(KERN_INFO "result_num = \"%d\"\n",result_num);//受信記号の解釈結果の番号を表示
 
 	for(i=0;i<mo[result_num].size;i++){
-		printk(KERN_INFO "char\"%c\":no%2d:send %d\n",mo[result_num].str_type, i, mo[result_num].code[i]);
-		if(mo[result_num].code[i] ){//on
+		printk(KERN_INFO "char\"%c\":no%2d:send %d\n",mo[result_num].str_type, i, mo[result_num].code[i]);//送信進捗を表示
+		if(mo[result_num].code[i] ){//コードに沿ってLEDをONにするためにGPIO25番をONに
 			gpio_base[7] = 1 << 25;
 		}
 		else{
-			gpio_base[10] = 1 << 25;//off
+			gpio_base[10] = 1 << 25;//OFFにする
 		}
-		for(j=0;j<100;j++){
+		for(j=0;j<100;j++){//udelayを使用したダーティーな実装方法。より良い方法は脳みそが足りなかったので思いつかず。100ms待つ。
 			udelay(1000);
 		}
 	}
 
-
-
-/*
-	for(i=0;i<(c-'0');i++ ){
-		printk(KERN_INFO "%c:%d",c,i);
-	}
-*/
 	return 1;
 
 }//end of led_write
@@ -165,8 +151,7 @@ static struct file_operations led_fops = {
 	.write = led_write
 };
 
-static int __init init_mod(void)
-{
+static int __init init_mod(void){
 	int retval;
 
 	gpio_base = ioremap_nocache(0x3f200000, 0xA0);
