@@ -28,7 +28,7 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 		int code[LENGTH]
 	} MORSE;
 
-	MORSE mo[]={//ãƒ¢ãƒ¼ãƒ«ã‚¹ç¬¦å·ãƒªã‚¹ãƒˆã€‚å’Œæ–‡ãƒ¢ãƒ¼ãƒ«ã‚¹ã‚„é€ä¿¡é–‹å§‹ç­‰ã€…ã®ç•¥ç¬¦å·ã«ã¯éå¯¾å¿œã€‚
+	MORSE mo[]={//ƒ‚[ƒ‹ƒX•„†ƒŠƒXƒgB˜a•¶ƒ‚[ƒ‹ƒX‚â‘—MŠJn“™X‚Ì—ª•„†‚É‚Í”ñ‘Î‰B
 		{'0' , 22, {1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,0 } },// 0
 		{'1' , 18, {1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,0         } },// 1
 		{'2' , 18, {1,0,1,0,1,1,1,0,1,1,1,0,1,1,1,0,0         } },// 2
@@ -75,21 +75,22 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 		{'(' , 18, {1,1,1,0,1,0,1,1,1,0,1,1,1,0,1,0,0         } },//43
 		{')' , 22, {1,1,1,0,1,0,1,1,1,0,1,1,1,0,1,0,1,1,1,0,0 } },//44
 		{'\"', 18, {1,0,1,1,1,0,1,0,1,0,1,1,1,0,1,0,0         } },//45
-		{'#' ,  1, {0                                         } } //46
+		{' ' ,  7, {0,0,0,0,0,0,0                             } },//46
+		{'#' ,  1, {0                                         } } //47
 	};
 
 	if(copy_from_user(&c,buf,sizeof(char) ) ){
 		return -EFAULT;
 	}
-	printk(KERN_INFO "receive \"%c\"\n",c);//å—ä¿¡è¨˜å·è¡¨ç¤º
+	printk(KERN_INFO "receive \"%c\"\n",c);//óM‹L†•\¦
 
-	if     ( isalpha((unsigned char)c) ) {//ã‚¢ãƒ«ãƒ•ã‚¡ãƒ™ãƒƒãƒˆã‚’å—ä¿¡ã—ãŸå ´åˆ
-		result_num = toupper((unsigned char)c) -'A' +1 -'0' +'9';//ç¬¦å·ãƒªã‚¹ãƒˆã®ã‚¢ãƒ«ãƒ•ã‚¡ãƒ™ãƒƒãƒˆé …ã‚’å‡ºåŠ›ã€‚ãªãŠã€ãƒã‚¸ãƒƒã‚¯ãƒŠãƒ³ãƒãƒ¼ã¯ãƒªã‚¹ãƒˆã¸ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+	if     ( isalpha((unsigned char)c) ) {//ƒAƒ‹ƒtƒ@ƒxƒbƒg‚ğóM‚µ‚½ê‡
+		result_num = toupper((unsigned char)c) -'A' +1 -'0' +'9';//•„†ƒŠƒXƒg‚ÌƒAƒ‹ƒtƒ@ƒxƒbƒg€‚ğo—ÍB‚È‚¨Aƒ}ƒWƒbƒNƒiƒ“ƒo[‚ÍƒŠƒXƒg‚Ö‚ÌƒIƒtƒZƒbƒg
 	}
-	else if( isdigit((unsigned char)c) ) {//10é€²æ•°ã®æ•°å­—ã‚’å—ä¿¡ã—ãŸå ´åˆ
-		result_num = c -'0';//ç¬¦å·ãƒªã‚¹ãƒˆã®10é€²æ•°ã®æ•°å­—é …ã‚’å‡ºåŠ›ã€‚ãªãŠã€ãƒã‚¸ãƒƒã‚¯ãƒŠãƒ³ãƒãƒ¼ã¯ãƒªã‚¹ãƒˆã¸ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+	else if( isdigit((unsigned char)c) ) {//10i”‚Ì”š‚ğóM‚µ‚½ê‡
+		result_num = c -'0';//•„†ƒŠƒXƒg‚Ì10i”‚Ì”š€‚ğo—ÍB‚È‚¨Aƒ}ƒWƒbƒNƒiƒ“ƒo[‚ÍƒŠƒXƒg‚Ö‚ÌƒIƒtƒZƒbƒg
 	}
-	else{//ãã‚Œä»¥å¤–ã‚’å—ä¿¡ã—ãŸå ´åˆã€‚ctypeã‚’æ´»ç”¨ã—ã‚ˆã†ã«ã‚‚ãƒ¢ãƒ¼ãƒ«ã‚¹ä¿¡å·ã¨ã—ã¦å‡ºåŠ›å¯èƒ½ãªè¨˜å·ã¨ASCIIã‚³ãƒ¼ãƒ‰ã¨ã®ç›¸æ€§ãŒã™ã“ã¶ã‚‹æ‚ªã‹ã£ãŸã€‚
+	else{//‚»‚êˆÈŠO‚ğóM‚µ‚½ê‡Bctype‚ğŠˆ—p‚µ‚æ‚¤‚É‚àƒ‚[ƒ‹ƒXM†‚Æ‚µ‚Äo—Í‰Â”\‚È‹L†‚ÆASCIIƒR[ƒh‚Æ‚Ì‘Š«‚ª‚·‚±‚Ô‚éˆ«‚©‚Á‚½B
 		switch (c){
 			case '.' :
 				result_num = 36;
@@ -121,23 +122,26 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 			case '\"':
 				result_num = 45;
 				break;
-			default://å¯¾è±¡å¤–ã‚³ãƒ¼ãƒ‰ã¯1ä¼‘ç¬¦ã¨ã—ã¦è§£é‡ˆã™ã‚‹ã“ã¨ã¨ã—ãŸã€‚
+			case ' ':
 				result_num = 46;
 				break;
+			default://‘ÎÛŠOƒR[ƒh‚Í1‹x•„‚Æ‚µ‚Ä‰ğß‚·‚é‚±‚Æ‚Æ‚µ‚½B
+				result_num = 47;
+				break;
 		}
-	}//elseã®æ‹¬å¼§é–‰ã˜
+	}//else‚ÌŠ‡ŒÊ•Â‚¶
 
-	printk(KERN_INFO "result_num = \"%d\"\n",result_num);//å—ä¿¡è¨˜å·ã®è§£é‡ˆçµæœã®ç•ªå·ã‚’è¡¨ç¤º
+	printk(KERN_INFO "result_num = \"%d\"\n",result_num);//óM‹L†‚Ì‰ğßŒ‹‰Ê‚Ì”Ô†‚ğ•\¦
 
 	for(i=0;i<mo[result_num].size;i++){
-		printk(KERN_INFO "char\"%c\":no%2d:send %d\n",mo[result_num].str_type, i, mo[result_num].code[i]);//é€ä¿¡é€²æ—ã‚’è¡¨ç¤º
-		if(mo[result_num].code[i] ){//ã‚³ãƒ¼ãƒ‰ã«æ²¿ã£ã¦LEDã‚’ONã«ã™ã‚‹ãŸã‚ã«GPIO25ç•ªã‚’ONã«
+		printk(KERN_INFO "char\"%c\":no%2d:send %d\n",mo[result_num].str_type, i, mo[result_num].code[i]);//‘—Mi’»‚ğ•\¦
+		if(mo[result_num].code[i] ){//ƒR[ƒh‚É‰ˆ‚Á‚ÄLED‚ğON‚É‚·‚é‚½‚ß‚ÉGPIO25”Ô‚ğON‚É
 			gpio_base[7] = 1 << 25;
 		}
 		else{
-			gpio_base[10] = 1 << 25;//OFFã«ã™ã‚‹
+			gpio_base[10] = 1 << 25;//OFF‚É‚·‚é
 		}
-		for(j=0;j<100;j++){//udelayã‚’ä½¿ç”¨ã—ãŸãƒ€ãƒ¼ãƒ†ã‚£ãƒ¼ãªå®Ÿè£…æ–¹æ³•ã€‚ã‚ˆã‚Šè‰¯ã„æ–¹æ³•ã¯è„³ã¿ããŒè¶³ã‚Šãªã‹ã£ãŸã®ã§æ€ã„ã¤ã‹ãšã€‚100mså¾…ã¤ã€‚
+		for(j=0;j<100;j++){//udelay‚ğg—p‚µ‚½ƒ_[ƒeƒB[‚ÈÀ‘••û–@B‚æ‚è—Ç‚¢•û–@‚Í”]‚İ‚»‚ª‘«‚è‚È‚©‚Á‚½‚Ì‚Åv‚¢‚Â‚©‚¸B100ms‘Ò‚ÂB
 			udelay(1000);
 		}
 	}
