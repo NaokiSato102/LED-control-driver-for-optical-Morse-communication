@@ -7,7 +7,7 @@ $ echo [英文] > /dev/myled0
 $ cat [英文が書かれたファイル] > /dev/myled0  
 といった風に使う
 
-参考
-https://ja.wikipedia.org/wiki/モールス符号
-動作のようす
+参考  
+https://ja.wikipedia.org/wiki/モールス符号  
+動作のようす  
 https://youtu.be/kp5TPf70D9U
