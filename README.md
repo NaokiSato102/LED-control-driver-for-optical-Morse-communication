@@ -9,5 +9,5 @@ $ cat [英文が書かれたファイル] > /dev/myled0
 
 参考  
 https://ja.wikipedia.org/wiki/モールス符号  
-動作のようす  
+動作デモ  
 https://youtu.be/kp5TPf70D9U
