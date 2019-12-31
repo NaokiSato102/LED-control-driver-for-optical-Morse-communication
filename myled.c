@@ -50,8 +50,7 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 	int i, result_num;
 	typedef struct s_morse {
 		char str_type;
-		int size;
-		int code[LENGTH]
+		char code[LENGTH];
 	} MORSE;
 
 	//モールス符号リスト。和文モールスや送信開始等々の略符号には非対応。
@@ -167,7 +166,7 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 
 	printk(KERN_INFO "result_num = \"%d\"\n",result_num);//受信記号の解釈結果の番号を表示
 
-	for(i=0; mo[result_num].code[i] !='\0' ;i++){
+	for(i=0; mo[result_num].code[i] != '\0' ;i++){
 		//送信進捗を表示
 		printk(KERN_INFO "char\"%c\":no%2d:send %d\n",
 			mo[result_num].str_type, i, mo[result_num].code[i]
