@@ -23,25 +23,25 @@ static void led_operator(char code){
 	int ON_time  = 0;
 	int OFF_time = 0;
 	switch (code){
-	case '.':
-		ON_time  = 100;
-		OFF_time = 100;
-		break;
+		case '.':
+			gpio_base[10] = 1 << 25;//OFF
+			msleep(100);
+			gpio_base[ 7] = 1 << 25;//ON
+			msleep(100);
+			break;
 
-	case '-':
-		ON_time  = 300;
-		OFF_time = 100;
-		break;	
+		case '-':
+			gpio_base[10] = 1 << 25;//OFF
+			msleep(300);
+			gpio_base[ 7] = 1 << 25;//ON
+			msleep(100);
+			break;	
 
-	case ' ':
-		ON_time  =   0;
-		OFF_time = 400;
-		break;
+		case ' ':
+			gpio_base[10] = 1 << 25;//OFF
+			msleep(400);
+			break;
 	}
-	gpio_base[10] = 1 << 25;//OFF
-	msleep(OFF_time);
-	gpio_base[7] = 1 << 25;//ON
-	msleep(ON_time );
 }
 
 
