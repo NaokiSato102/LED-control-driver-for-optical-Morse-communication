@@ -24,24 +24,24 @@ static void led_operator(char code){
 	int OFF_time = 0;
 	switch (code){
 	case '.':
-		ON_time  = 1;
-		OFF_time = 1;
+		ON_time  = 100;
+		OFF_time = 100;
 		break;
 
 	case '-':
-		ON_time  = 3;
-		OFF_time = 1;
+		ON_time  = 300;
+		OFF_time = 100;
 		break;	
 
 	case ' ':
-		ON_time  = 0;
-		OFF_time = 4;
+		ON_time  =   0;
+		OFF_time = 400;
 		break;
 	}
 	gpio_base[10] = 1 << 25;//OFF
-	msleep(OFF_time * 100);
+	msleep(OFF_time);
 	gpio_base[7] = 1 << 25;//ON
-	msleep(ON_time  * 100);
+	msleep(ON_time );
 }
 
 
@@ -168,7 +168,7 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 
 	for(i=0; mo[result_num].code[i] != '\0' ;i++){
 		//‘—Mi’»‚ð•\Ž¦
-		printk(KERN_INFO "char\"%c\":no%2d:send %d\n",
+		printk(KERN_INFO "char\"%c\":no%2d:send %s\n",
 			mo[result_num].str_type, i, mo[result_num].code[i]
 		);
 
