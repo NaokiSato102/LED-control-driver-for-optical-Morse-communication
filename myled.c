@@ -12,7 +12,7 @@
 MODULE_AUTHOR("Naoki Sato");
 MODULE_DESCRIPTION("LED control driver for optical Morse communication");
 MODULE_LICENSE("GPL");
-MODULE_VERSION("1.0");
+MODULE_VERSION("1.1");
 
 static dev_t dev;
 static struct cdev cdv;
@@ -141,9 +141,10 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 		else{
 			gpio_base[10] = 1 << 25;//OFFにする
 		}
-		for(j=0;j<100;j++){//udelayを使用したダーティーな実装方法。より良い方法は脳みそが足りなかったので思いつかず。100ms待つ。
+		/*for(j=0;j<100;j++){//udelayを使用したダーティーな実装方法。より良い方法は脳みそが足りなかったので思いつかず。100ms待つ。
 			udelay(1000);
-		}
+		}*/
+		msleep(100);
 	}
 
 	return 1;
