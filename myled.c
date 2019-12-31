@@ -47,7 +47,7 @@ static void led_operator(char code){
 
 static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_t* pos){
 	char c;
-	int i, j, result_num;
+	int i, result_num;
 	typedef struct s_morse {
 		char str_type;
 		int size;
@@ -103,7 +103,7 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 		{')' ,{'-.--.- '}},//44
 		{'\"',{'.-..-. '}},//45
 		{' ' ,{' '}      },//46
-		{'#' ,{}         },//47
+		{'#' ,{''}       },//47
 	};
 
 	if(copy_from_user(&c,buf,sizeof(char) ) ){
