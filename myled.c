@@ -32,9 +32,9 @@ static void led_operator(char code){
 
 		case '-':
 			gpio_base[10] = 1 << 25;//OFF
-			msleep(300);
-			gpio_base[ 7] = 1 << 25;//ON
 			msleep(100);
+			gpio_base[ 7] = 1 << 25;//ON
+			msleep(300);
 			break;	
 
 		case ' ':
@@ -168,7 +168,7 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 
 	for(i=0; mo[result_num].code[i] != '\0' ;i++){
 		//‘—Mi’»‚ð•\Ž¦
-		printk(KERN_INFO "char\"%c\":no%2d:send %s\n",
+		printk(KERN_INFO "char\"%c\":no%2d:send %c\n",
 			mo[result_num].str_type, i, mo[result_num].code[i]
 		);
 
