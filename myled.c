@@ -113,7 +113,7 @@ static ssize_t led_write(struct file* filp, const char* buf, size_t count, loff_
 			case '@' :
 				result_num = 42;
 				break;
-			case '()' :
+			case '(' :
 				result_num = 43;
 				break;
 			case ')' :
